@@ -303,7 +303,7 @@
     const hint           = document.getElementById("hint");
 
     /* ── State ─────────────────────────────── */
-    const MAX_NO  = 12;   // trigger overlay after this many attempts
+    const MAX_ATTEMPTS = 7;
     let noCount   = 0;
     let btnW      = 0;
     let btnH      = 0;
@@ -311,6 +311,8 @@
     let lastMouseX = 0;
     let lastMouseY = 0;
     let proximityMode = false;
+    let lastDodgeMouseX = 0;
+    let lastDodgeMouseY = 0;
 
     /* Subtext messages — enough for 12 rounds */
     const subtexts = [
@@ -391,13 +393,12 @@
 
       noCount++;
 
-      if (noCount >= MAX_NO) {
-        videoOverlay.classList.add("active");
-        vid.play().catch(() => {});
+      if (noCount >= MAX_ATTEMPTS) {
+        noBtn.style.display = 'none';  // Hide the No button permanently
         return;
       }
 
-      if (noCount === 3) {
+      if (noCount === 3 || noCount === 6) {
         videoOverlay.classList.add("active");
         vid.play().catch(() => {});
       }
@@ -430,6 +431,9 @@
       const idx = Math.min(noCount - 1, noLabels.length - 1);
       noBtn.textContent  = noLabels[idx];
       subtext.innerHTML  = subtexts[Math.min(noCount, subtexts.length - 1)];
+
+      lastDodgeMouseX = mouseX;
+      lastDodgeMouseY = mouseY;
     }
 
     /* ── Proximity check ────────────────────── */
@@ -444,6 +448,9 @@
         mouseX = e.touches[0].clientX;
         mouseY = e.touches[0].clientY;
       }
+
+      const moveDist = Math.sqrt((mouseX - lastDodgeMouseX) ** 2 + (mouseY - lastDodgeMouseY) ** 2);
+      if (moveDist < 50) return;  // Ignore if cursor hasn't moved significantly since last dodge
 
       const rect = noBtn.getBoundingClientRect();
       const centerX = rect.left + btnW / 2;
