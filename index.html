@@ -393,58 +393,72 @@
 
     /* ── No button handler ──────────────────── */
     function handleNo(mouseX, mouseY) {
-      if (onCooldown) return;
-      onCooldown = true;
-      setTimeout(() => { onCooldown = false; }, 300);
+  if (onCooldown) return;
+  onCooldown = true;
+  setTimeout(() => { onCooldown = false; }, 300);
 
-      noCount++;
+  noCount++;
 
-      if (noCount >= MAX_ATTEMPTS) {
-        noBtn.style.display = 'none';
-        return;
-      }
+  if (noCount >= MAX_ATTEMPTS) {
+    noBtn.style.display = 'none';
+    return;
+  }
 
-      if (noCount === 3 || noCount === 6) {
-        videoOverlay.classList.add("active");
-        vid.play().catch(() => {});
-      }
+  if (noCount === 3 || noCount === 6) {
+    videoOverlay.classList.add("active");
+    vid.play().catch(() => {});
+  }
 
-      if (!noBtn.classList.contains("floating")) {
-        noBtn.classList.add("floating");
-        hint.style.opacity = "0";
-        proximityMode = true;
-        noBtn.removeEventListener("mouseenter", initialHandleNo);
-        noBtn.removeEventListener("touchstart", initialTouchHandler);
-      }
+  if (!noBtn.classList.contains("floating")) {
+    noBtn.classList.add("floating");
+    hint.style.opacity = "0";
+    proximityMode = true;
+    noBtn.removeEventListener("mouseenter", initialHandleNo);
+    noBtn.removeEventListener("touchstart", initialTouchHandler);
+  }
 
-      // Always re-measure after text change so size is always accurate
-      const freshRect = noBtn.getBoundingClientRect();
-      btnW = freshRect.width  || 140;
-      btnH = freshRect.height || 50;
+  // Update text **before measuring size**
+  const idx = Math.min(noCount - 1, noLabels.length - 1);
+  noBtn.textContent = noLabels[idx];
+  subtext.innerHTML = subtexts[Math.min(noCount, subtexts.length - 1)];
 
-      const { x, y } = safePos(mouseX, mouseY);
+  // Re-measure size after text change
+  btnW = noBtn.offsetWidth;
+  btnH = noBtn.offsetHeight;
 
-      // Hard clamp — guarantees button is always fully inside the viewport
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const EDGE = 16;
-      noBtn.style.left = Math.max(EDGE, Math.min(x, vw - btnW - EDGE)) + "px";
-      noBtn.style.top  = Math.max(EDGE, Math.min(y, vh - btnH - EDGE)) + "px";
+  // Random position
+  const EDGE = 16; // minimum distance from viewport edge
+  let x = Math.random() * (window.innerWidth - btnW - EDGE * 2) + EDGE;
+  let y = Math.random() * (window.innerHeight - btnH - EDGE * 2) + EDGE;
 
-      noBtn.style.pointerEvents = 'none';
-      setTimeout(() => { noBtn.style.pointerEvents = 'auto'; }, 100);
+  // Optional: make sure it’s at least some distance away from cursor
+  const BUFFER = 120;
+  let dist = Math.sqrt((x + btnW/2 - mouseX) ** 2 + (y + btnH/2 - mouseY) ** 2);
+  let tries = 0;
+  while (dist < BUFFER && tries < 50) {
+    x = Math.random() * (window.innerWidth - btnW - EDGE * 2) + EDGE;
+    y = Math.random() * (window.innerHeight - btnH - EDGE * 2) + EDGE;
+    dist = Math.sqrt((x + btnW/2 - mouseX) ** 2 + (y + btnH/2 - mouseY) ** 2);
+    tries++;
+  }
 
-      noBtn.classList.remove("popped");
-      void noBtn.offsetWidth;
-      noBtn.classList.add("popped");
+  // **Hard clamp** — guarantees button never leaves viewport
+  x = Math.max(0, Math.min(x, window.innerWidth - btnW));
+  y = Math.max(0, Math.min(y, window.innerHeight - btnH));
 
-      const idx = Math.min(noCount - 1, noLabels.length - 1);
-      noBtn.textContent = noLabels[idx];
-      subtext.innerHTML = subtexts[Math.min(noCount, subtexts.length - 1)];
+  noBtn.style.left = x + "px";
+  noBtn.style.top  = y + "px";
 
-      lastDodgeMouseX = mouseX;
-      lastDodgeMouseY = mouseY;
-    }
+  noBtn.style.pointerEvents = 'none';
+  setTimeout(() => { noBtn.style.pointerEvents = 'auto'; }, 100);
+
+  noBtn.classList.remove("popped");
+  void noBtn.offsetWidth;
+  noBtn.classList.add("popped");
+
+  lastDodgeMouseX = mouseX;
+  lastDodgeMouseY = mouseY;
+}
 
     /* ── Proximity check ────────────────────── */
     function checkProximity(e) {
