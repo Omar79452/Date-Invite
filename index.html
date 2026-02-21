@@ -7,39 +7,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet"/>
-
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     :root {
-      --rose:      #e0607e;
-      --rose-dark: #c44d6e;
-      --rose-glow: rgba(224,96,126,0.32);
-      --blush:     #fff0f4;
-      --card:      #ffffff;
-      --text-dark: #5a1f35;
-      --text-mid:  #a06078;
-      --text-soft: #cba0b0;
+      --rose:#e0607e; --rose-dark:#c44d6e; --rose-glow:rgba(224,96,126,0.32);
+      --blush:#fff0f4; --card:#ffffff;
+      --text-dark:#5a1f35; --text-mid:#a06078; --text-soft:#cba0b0;
     }
-
-    html, body { height:100%; overflow:hidden; }
-
+    html,body { height:100%; overflow:hidden; }
     body {
       font-family:'Nunito',sans-serif;
       background:var(--blush);
       background-image:
-        radial-gradient(ellipse at 15% 15%, #ffd6e4 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 85%, #fce4f0 0%, transparent 55%);
-      display:flex; align-items:center; justify-content:center;
-      min-height:100vh;
+        radial-gradient(ellipse at 15% 15%,#ffd6e4 0%,transparent 55%),
+        radial-gradient(ellipse at 85% 85%,#fce4f0 0%,transparent 55%);
+      display:flex; align-items:center; justify-content:center; min-height:100vh;
     }
 
-    /* ── Particles ── */
+    /* Particles */
     #particles { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
-    .p {
-      position:absolute; opacity:0;
-      animation:rise linear infinite; user-select:none;
-    }
+    .p { position:absolute; opacity:0; animation:rise linear infinite; user-select:none; }
     @keyframes rise {
       0%   { transform:translateY(110vh) rotate(0deg);   opacity:0; }
       5%   { opacity:.85; }
@@ -47,16 +34,12 @@
       100% { transform:translateY(-15vh) rotate(360deg); opacity:0; }
     }
 
-    /* ── Card ── */
+    /* Card */
     .card {
-      position:relative; z-index:10;
-      background:var(--card);
-      border:1.5px solid rgba(220,130,160,.18);
-      border-radius:28px;
-      padding:52px 44px 44px;
-      max-width:480px; width:calc(100vw - 36px);
-      text-align:center;
-      box-shadow:0 28px 70px rgba(200,80,120,.13);
+      position:relative; z-index:10; background:var(--card);
+      border:1.5px solid rgba(220,130,160,.18); border-radius:28px;
+      padding:52px 44px 44px; max-width:480px; width:calc(100vw - 36px);
+      text-align:center; box-shadow:0 28px 70px rgba(200,80,120,.13);
       animation:cardIn .75s cubic-bezier(.34,1.56,.64,1) both;
     }
     @keyframes cardIn {
@@ -64,100 +47,45 @@
       to   { opacity:1; transform:translateY(0) scale(1); }
     }
 
-    /* ── Envelope ── */
+    /* Envelope */
     .env-wrap { display:flex; justify-content:center; margin-bottom:22px; animation:fadeUp .6s .1s both; }
     .env { position:relative; width:78px; height:58px; animation:float 3.5s ease-in-out infinite; }
-    @keyframes float {
-      0%,100% { transform:translateY(0) rotate(-2deg); }
-      50%      { transform:translateY(-8px) rotate(2deg); }
-    }
-    .env-body {
-      position:absolute; inset:0;
-      background:linear-gradient(150deg,#fcd0de,#f5a6bf);
-      border-radius:6px; box-shadow:0 8px 24px rgba(220,80,130,.22);
-    }
-    .env-flap {
-      position:absolute; top:0; left:0; right:0; height:50%;
-      background:linear-gradient(180deg,#f799b8,#f0b0cc);
-      border-radius:6px 6px 0 0;
-      clip-path:polygon(0 0,50% 100%,100% 0);
-    }
-    .env-heart {
-      position:absolute; inset:0;
-      display:flex; align-items:center; justify-content:center;
-      font-size:26px; margin-top:10px;
-    }
+    @keyframes float { 0%,100%{transform:translateY(0) rotate(-2deg);} 50%{transform:translateY(-8px) rotate(2deg);} }
+    .env-body { position:absolute; inset:0; background:linear-gradient(150deg,#fcd0de,#f5a6bf); border-radius:6px; box-shadow:0 8px 24px rgba(220,80,130,.22); }
+    .env-flap { position:absolute; top:0; left:0; right:0; height:50%; background:linear-gradient(180deg,#f799b8,#f0b0cc); border-radius:6px 6px 0 0; clip-path:polygon(0 0,50% 100%,100% 0); }
+    .env-heart { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:26px; margin-top:10px; }
 
-    /* ── Text ── */
-    .eyebrow {
-      font-size:11px; font-weight:700;
-      letter-spacing:.18em; text-transform:uppercase;
-      color:var(--rose); margin-bottom:12px;
-      animation:fadeUp .6s .2s both;
-    }
-    .headline {
-      font-family:'Playfair Display',serif;
-      font-size:clamp(24px,5vw,36px); font-weight:700;
-      color:var(--text-dark); line-height:1.3; margin-bottom:14px;
-      animation:fadeUp .6s .3s both;
-    }
-    .subtext {
-      font-size:15px; font-weight:300; font-style:italic;
-      color:var(--text-mid); line-height:1.65; margin-bottom:34px;
-      transition:all .35s ease;
-      animation:fadeUp .6s .4s both;
-    }
-    .hint {
-      margin-top:18px; font-size:12px;
-      color:var(--text-soft); transition:opacity .4s;
-      animation:fadeUp .6s .65s both;
-    }
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(16px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
+    /* Text */
+    .eyebrow { font-size:11px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--rose); margin-bottom:12px; animation:fadeUp .6s .2s both; }
+    .headline { font-family:'Playfair Display',serif; font-size:clamp(24px,5vw,36px); font-weight:700; color:var(--text-dark); line-height:1.3; margin-bottom:14px; animation:fadeUp .6s .3s both; }
+    .subtext { font-size:15px; font-weight:300; font-style:italic; color:var(--text-mid); line-height:1.65; margin-bottom:34px; transition:all .35s ease; animation:fadeUp .6s .4s both; }
+    .hint { margin-top:18px; font-size:12px; color:var(--text-soft); transition:opacity .4s; animation:fadeUp .6s .65s both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
 
-    /* ── Buttons ── */
-    .btn-row {
-      display:flex; gap:12px;
-      justify-content:center; flex-wrap:wrap;
-      animation:fadeUp .6s .5s both;
-    }
+    /* Buttons */
+    .btn-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; animation:fadeUp .6s .5s both; }
     .btn {
       position:relative; padding:14px 30px;
       font-family:'Nunito',sans-serif; font-size:15px; font-weight:700;
-      border:none; border-radius:60px;
-      cursor:pointer; overflow:hidden;
+      border:none; border-radius:60px; cursor:pointer; overflow:hidden;
       transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
       -webkit-tap-highlight-color:transparent; user-select:none;
     }
     .btn:active { transform:scale(.94) !important; }
-
-    .btn-yes {
-      background:linear-gradient(135deg,var(--rose),var(--rose-dark));
-      color:#fff; box-shadow:0 8px 28px var(--rose-glow);
-    }
+    .btn-yes { background:linear-gradient(135deg,var(--rose),var(--rose-dark)); color:#fff; box-shadow:0 8px 28px var(--rose-glow); }
     .btn-yes:hover { transform:translateY(-3px) scale(1.04); box-shadow:0 14px 40px var(--rose-glow); }
-    .shine {
-      position:absolute; inset:0;
-      background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);
-      transform:translateX(-100%); transition:transform .5s; pointer-events:none;
-    }
+    .shine { position:absolute; inset:0; background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%); transform:translateX(-100%); transition:transform .5s; pointer-events:none; }
     .btn-yes:hover .shine { transform:translateX(100%); }
 
-    .btn-no {
-      background:transparent; color:var(--text-mid);
-      border:2px solid #f7c5d0;
-    }
-    .btn-no:hover { border-color:var(--rose); color:var(--rose); }
+    /* No button — normal state */
+    .btn-no { background:transparent; color:var(--text-mid); border:2px solid #f7c5d0; }
 
-    /* Floating state — position controlled entirely by JS */
+    /* No button — floating state (JS takes full control of position) */
     .btn-no.floating {
       position:fixed !important;
       z-index:9999;
-      /* NO transition so it teleports instantly — avoids mid-flight mouseenter re-triggers */
-      transition:none !important;
-      pointer-events:auto;
+      transition:none !important; /* instant teleport — no sliding */
+      pointer-events:none;        /* mouse events disabled; proximity detection handles it */
     }
 
     @keyframes pop {
@@ -168,53 +96,24 @@
     }
     .btn-no.popped { animation:pop .3s ease forwards; }
 
-    /* ── Overlays ── */
-    .overlay {
-      position:fixed; inset:0;
-      display:flex; align-items:center; justify-content:center;
-      z-index:100; padding:20px;
-      opacity:0; pointer-events:none;
-      backdrop-filter:blur(12px);
-      background:rgba(255,230,238,.65);
-      transition:opacity .45s ease;
-    }
+    /* Overlays */
+    .overlay { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:100; padding:20px; opacity:0; pointer-events:none; backdrop-filter:blur(12px); background:rgba(255,230,238,.65); transition:opacity .45s ease; }
     .overlay.active { opacity:1; pointer-events:all; }
 
-    /* ── Success ── */
+    /* Success */
     .success-box { text-align:center; animation:popIn .65s cubic-bezier(.34,1.56,.64,1) both; }
-    @keyframes popIn {
-      from { transform:scale(.5) rotate(-6deg); opacity:0; }
-      to   { transform:scale(1) rotate(0); opacity:1; }
-    }
-    .s-icon { font-size:90px; display:block; margin-bottom:18px;
-      animation:iconBounce .8s cubic-bezier(.34,1.56,.64,1) .25s both; }
-    @keyframes iconBounce {
-      from { transform:translateY(-50px) scale(.5); opacity:0; }
-      to   { transform:translateY(0) scale(1); opacity:1; }
-    }
+    @keyframes popIn { from{transform:scale(.5) rotate(-6deg);opacity:0;} to{transform:scale(1) rotate(0);opacity:1;} }
+    .s-icon { font-size:90px; display:block; margin-bottom:18px; animation:iconBounce .8s cubic-bezier(.34,1.56,.64,1) .25s both; }
+    @keyframes iconBounce { from{transform:translateY(-50px) scale(.5);opacity:0;} to{transform:translateY(0) scale(1);opacity:1;} }
     .s-title { font-family:'Playfair Display',serif; font-size:clamp(44px,10vw,72px); color:var(--rose); margin-bottom:14px; line-height:1; }
     .s-msg { font-size:17px; color:var(--text-mid); line-height:1.7; font-style:italic; }
-
     #confetti { position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden; }
     .cp { position:absolute; top:-14px; border-radius:3px; animation:cpFall linear forwards; }
-    @keyframes cpFall {
-      0%  { transform:translateY(0) rotate(0); opacity:1; }
-      85% { opacity:1; }
-      100%{ transform:translateY(110vh) rotate(800deg); opacity:0; }
-    }
+    @keyframes cpFall { 0%{transform:translateY(0) rotate(0);opacity:1;} 85%{opacity:1;} 100%{transform:translateY(110vh) rotate(800deg);opacity:0;} }
 
-    /* ── Video overlay ── */
+    /* Video overlay */
     .video-overlay { z-index:120; }
-    .video-box {
-      background:var(--card);
-      border:1.5px solid rgba(220,130,160,.18);
-      border-radius:28px;
-      max-width:520px; width:calc(100vw - 32px);
-      max-height:calc(100vh - 40px); overflow-y:auto;
-      padding:28px 28px 24px; text-align:center;
-      box-shadow:0 28px 70px rgba(200,80,120,.13);
-      animation:cardIn .5s cubic-bezier(.34,1.56,.64,1) both;
-    }
+    .video-box { background:var(--card); border:1.5px solid rgba(220,130,160,.18); border-radius:28px; max-width:520px; width:calc(100vw - 32px); max-height:calc(100vh - 40px); overflow-y:auto; padding:28px 28px 24px; text-align:center; box-shadow:0 28px 70px rgba(200,80,120,.13); animation:cardIn .5s cubic-bezier(.34,1.56,.64,1) both; }
     .v-caption { font-family:'Playfair Display',serif; font-size:19px; font-style:italic; color:var(--text-dark); margin-bottom:14px; }
     video { display:block; width:100%; height:auto; max-height:min(360px,42vh); border-radius:16px; object-fit:contain; background:#111; }
     .caught-emoji { font-size:54px; display:block; margin:16px 0 10px; }
@@ -225,7 +124,6 @@
       .card { padding:38px 22px 34px; }
       .btn-row { flex-direction:column; align-items:center; }
       .btn { width:100%; max-width:270px; }
-      .btn-no.floating { width:auto !important; max-width:none !important; }
       .s-icon { font-size:72px; }
     }
   </style>
@@ -234,8 +132,7 @@
 
   <div id="particles"></div>
 
-  <!-- MAIN CARD -->
-  <div class="card" id="card">
+  <div class="card">
     <div class="env-wrap">
       <div class="env">
         <div class="env-body"></div>
@@ -253,7 +150,6 @@
     <p class="hint" id="hint">Both buttons work. One of them is clearly smarter. 😇</p>
   </div>
 
-  <!-- SUCCESS -->
   <div class="overlay" id="successOverlay">
     <div class="success-box">
       <span class="s-icon">🥰</span>
@@ -263,7 +159,6 @@
     </div>
   </div>
 
-  <!-- CAUGHT -->
   <div class="overlay video-overlay" id="videoOverlay">
     <div class="video-box">
       <p class="v-caption">Okay… you really tried that hard? 😭</p>
@@ -277,11 +172,13 @@
   </div>
 
   <script>
-    /* ── Particles ─────────────────────────── */
+    /* ════════════════════════════════════════
+       PARTICLES
+    ════════════════════════════════════════ */
     const EMOJIS = ["🌸","💕","✨","🌷","💌","🌟","🫶","🍀","🌺","💗"];
     const pBox   = document.getElementById("particles");
     function spawnParticle() {
-      const el  = document.createElement("div");
+      const el = document.createElement("div");
       el.className = "p";
       el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
       const dur = 9 + Math.random() * 9, delay = Math.random() * 5;
@@ -292,7 +189,9 @@
     for (let i = 0; i < 20; i++) spawnParticle();
     setInterval(spawnParticle, 1800);
 
-    /* ── Elements ──────────────────────────── */
+    /* ════════════════════════════════════════
+       ELEMENTS & STATE
+    ════════════════════════════════════════ */
     const yesBtn         = document.getElementById("yesBtn");
     const noBtn          = document.getElementById("noBtn");
     const finalYes       = document.getElementById("finalYes");
@@ -302,14 +201,13 @@
     const subtext        = document.getElementById("subtext");
     const hint           = document.getElementById("hint");
 
-    /* ── State ─────────────────────────────── */
-    const MAX_NO  = 12;   // trigger overlay after this many attempts
-    let noCount   = 0;
-    let btnW      = 0;
-    let btnH      = 0;
-    let onCooldown = false;  // ← blocks rapid re-fires from mouseenter cascade
+    const MAX_NO = 12;
+    let noCount  = 0;
+    let isFloating = false;
+    let btnW = 0, btnH = 0;
+    let btnCX = 0, btnCY = 0;  // center of the button (updated after every move)
+    let canMove = true;         // cooldown flag
 
-    /* Subtext messages — enough for 12 rounds */
     const subtexts = [
       "I promise good vibes, great company,<br>and at least one laugh. 🌸",
       "Are you sure? I make really good company. 🥺",
@@ -324,47 +222,31 @@
       "Last warning — I'm very persistent. 😌",
       "Final answer? Really? Really really? 🫶",
     ];
-
-    /* No button labels — 12 stages */
     const noLabels = [
-      "Hmm… no 🙄",
-      "Still no 😤",
-      "Nope 🫣",
-      "No no no 😅",
-      "Not today 😒",
-      "Hard pass 🙃",
-      "Absolutely not 😤",
-      "Never! 😤",
-      "Still no… 😭",
-      "You sure? 😏",
-      "Last no! 😩",
-      "...okay fine 😤",
+      "Hmm… no 🙄","Still no 😤","Nope 🫣","No no no 😅",
+      "Not today 😒","Hard pass 🙃","Absolutely not 😤","Never! 😤",
+      "Still no… 😭","You sure? 😏","Last no! 😩","...okay fine 😤",
     ];
 
-    /* ── Safe position ─────────────────────────────────────────────────
-       Always keeps the button 60px away from every edge.
-       Does NOT require a minimum travel distance (that was causing the
-       20-tries loop to exhaust on small screens and land unpredictably).
-       Instead we divide the viewport into a 3×3 zone grid and always
-       pick a DIFFERENT zone from where the button currently lives —
-       guaranteeing visible movement while staying fully on-screen.
-    ────────────────────────────────────────────────────────────────── */
+    /* ════════════════════════════════════════
+       SAFE POSITION
+       Splits the viewport into a 3×3 grid.
+       Always picks a different grid cell so
+       the button visibly jumps every time.
+       60px margin from every edge — hard clamped.
+    ════════════════════════════════════════ */
+    const EDGE = 60;
     function safePos() {
-      const EDGE = 60;                          // px from every edge
-      const vw   = window.innerWidth;
-      const vh   = window.innerHeight;
-
-      // Usable area
+      const vw = window.innerWidth, vh = window.innerHeight;
       const areaW = vw - btnW - EDGE * 2;
       const areaH = vh - btnH - EDGE * 2;
+      const slotW = areaW / 3, slotH = areaH / 3;
 
-      // Current zone (0–2 in each axis)
-      const curX   = parseFloat(noBtn.style.left) || (vw / 2 - btnW / 2);
-      const curY   = parseFloat(noBtn.style.top)  || (vh / 2 - btnH / 2);
-      const curZX  = Math.floor(((curX - EDGE) / areaW) * 3);
-      const curZY  = Math.floor(((curY - EDGE) / areaH) * 3);
+      // Current cell
+      const curZX = Math.min(2, Math.max(0, Math.floor((btnCX - EDGE - btnW/2) / slotW)));
+      const curZY = Math.min(2, Math.max(0, Math.floor((btnCY - EDGE - btnH/2) / slotH)));
 
-      // Pick any zone that differs on at least one axis
+      // Choose a different cell
       let zx, zy, tries = 0;
       do {
         zx = Math.floor(Math.random() * 3);
@@ -372,20 +254,118 @@
         tries++;
       } while (tries < 30 && zx === curZX && zy === curZY);
 
-      // Random position within chosen zone
-      const slotW = areaW / 3;
-      const slotH = areaH / 3;
       let x = EDGE + zx * slotW + Math.random() * slotW;
       let y = EDGE + zy * slotH + Math.random() * slotH;
 
-      // Hard clamp — absolute safety net, never ever outside viewport
+      // Hard clamp — absolute guarantee
       x = Math.max(EDGE, Math.min(x, vw - btnW - EDGE));
       y = Math.max(EDGE, Math.min(y, vh - btnH - EDGE));
 
       return { x, y };
     }
 
-    /* ── Confetti ───────────────────────────── */
+    /* ════════════════════════════════════════
+       MOVE THE NO BUTTON
+    ════════════════════════════════════════ */
+    function moveNoBtn() {
+      if (!canMove) return;
+      canMove = false;
+
+      noCount++;
+
+      if (noCount >= MAX_NO) {
+        videoOverlay.classList.add("active");
+        vid.play().catch(() => {});
+        canMove = true;
+        return;
+      }
+
+      /* First time: freeze measurements and switch to fixed */
+      if (!isFloating) {
+        const r = noBtn.getBoundingClientRect();
+        btnW = r.width;
+        btnH = r.height;
+        noBtn.style.left = r.left + "px";
+        noBtn.style.top  = r.top  + "px";
+        noBtn.classList.add("floating");
+        hint.style.opacity = "0";
+        isFloating = true;
+      }
+
+      const { x, y } = safePos();
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+
+      /* Update tracked center for next proximity check */
+      btnCX = x + btnW / 2;
+      btnCY = y + btnH / 2;
+
+      /* Wiggle animation */
+      noBtn.classList.remove("popped");
+      void noBtn.offsetWidth;
+      noBtn.classList.add("popped");
+
+      /* Update labels */
+      const idx = Math.min(noCount - 1, noLabels.length - 1);
+      noBtn.textContent = noLabels[idx];
+      subtext.innerHTML = subtexts[Math.min(noCount, subtexts.length - 1)];
+
+      /* Cooldown: block next trigger for 600ms */
+      setTimeout(() => { canMove = true; }, 600);
+    }
+
+    /* ════════════════════════════════════════
+       PROXIMITY DETECTION via mousemove
+       ─────────────────────────────────────
+       Instead of mouseenter (which re-fires
+       every time the button teleports near
+       the cursor), we track the mouse on the
+       whole document and measure distance
+       from the cursor to the button's center.
+       When distance < TRIGGER_RADIUS → move.
+       This is 100% reliable — no ghost fires.
+    ════════════════════════════════════════ */
+    const TRIGGER_RADIUS = 55; // px — how close the cursor needs to get
+
+    document.addEventListener("mousemove", (e) => {
+      if (!isFloating || !canMove) return;
+      const dx = e.clientX - btnCX;
+      const dy = e.clientY - btnCY;
+      if (Math.sqrt(dx*dx + dy*dy) < TRIGGER_RADIUS) {
+        moveNoBtn();
+      }
+    });
+
+    /* ── Initial state: use mouseenter only before button goes floating ── */
+    noBtn.addEventListener("mouseenter", () => {
+      if (!isFloating) moveNoBtn();
+    });
+
+    /* ── Touch support (mobile) ── */
+    document.addEventListener("touchmove", (e) => {
+      if (!isFloating || !canMove) return;
+      const t  = e.touches[0];
+      const dx = t.clientX - btnCX;
+      const dy = t.clientY - btnCY;
+      if (Math.sqrt(dx*dx + dy*dy) < TRIGGER_RADIUS + 20) {
+        e.preventDefault();
+        moveNoBtn();
+      }
+    }, { passive: false });
+
+    noBtn.addEventListener("touchstart", (e) => {
+      if (!isFloating) { e.preventDefault(); moveNoBtn(); }
+    }, { passive: false });
+
+    /* ════════════════════════════════════════
+       SUCCESS & CONFETTI
+    ════════════════════════════════════════ */
+    function showSuccess() {
+      videoOverlay.classList.remove("active");
+      successOverlay.classList.add("active");
+      confetti();
+    }
+
     function confetti() {
       const box    = document.getElementById("confetti");
       const colors = ["#e0607e","#f7c5d0","#ffd6e4","#c44d70","#fff","#ffb3c6","#ff8fab"];
@@ -399,69 +379,8 @@
       setTimeout(() => box.innerHTML = "", 5500);
     }
 
-    /* ── No button handler ──────────────────── */
-    function handleNo() {
-      /* ── COOLDOWN GUARD ──────────────────────────────────────────────
-         When the button teleports to a new position, the browser may
-         immediately fire another mouseenter if the cursor lands inside
-         the new bounding box. Without this guard, noCount can jump from
-         0 to MAX_NO in a single physical hover, making the button
-         "disappear" instantly. We block re-entry for 500 ms.
-      ─────────────────────────────────────────────────────────────── */
-      if (onCooldown) return;
-      onCooldown = true;
-      setTimeout(() => { onCooldown = false; }, 500);
-
-      noCount++;
-
-      if (noCount >= MAX_NO) {
-        videoOverlay.classList.add("active");
-        vid.play().catch(() => {});
-        return;
-      }
-
-      /* First move: measure button size & lock it as fixed */
-      if (!noBtn.classList.contains("floating")) {
-        const r = noBtn.getBoundingClientRect();
-        btnW = r.width;
-        btnH = r.height;
-        /* Anchor to current visual position before switching to fixed */
-        noBtn.style.left = r.left + "px";
-        noBtn.style.top  = r.top  + "px";
-        noBtn.classList.add("floating");
-        hint.style.opacity = "0";
-      }
-
-      /* Move to safe zone */
-      const { x, y } = safePos();
-      noBtn.style.left = x + "px";
-      noBtn.style.top  = y + "px";
-
-      /* Wiggle */
-      noBtn.classList.remove("popped");
-      void noBtn.offsetWidth;
-      noBtn.classList.add("popped");
-
-      /* Update labels */
-      const idx = Math.min(noCount - 1, noLabels.length - 1);
-      noBtn.textContent  = noLabels[idx];
-      subtext.innerHTML  = subtexts[Math.min(noCount, subtexts.length - 1)];
-    }
-
-    /* ── Success ────────────────────────────── */
-    function showSuccess() {
-      videoOverlay.classList.remove("active");
-      successOverlay.classList.add("active");
-      confetti();
-    }
-
-    /* ── Listeners ──────────────────────────── */
     yesBtn.addEventListener("click", showSuccess);
     finalYes.addEventListener("click", showSuccess);
-
-    noBtn.addEventListener("mouseenter", handleNo);
-    noBtn.addEventListener("touchstart", e => { e.preventDefault(); handleNo(); }, { passive:false });
-
     videoOverlay.addEventListener("click", e => {
       if (e.target === videoOverlay) videoOverlay.classList.remove("active");
     });
