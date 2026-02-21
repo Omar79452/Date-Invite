@@ -1,200 +1,207 @@
 /* ============================================
-   DATE INVITE — script.js
+   DATE INVITE — script.js  (romantic edition)
    ============================================ */
 
+// ── Elements ──────────────────────────────────
 const yesBtn         = document.getElementById('yesBtn');
 const noBtn          = document.getElementById('noBtn');
+const finalYesBtn    = document.getElementById('finalYesBtn');   // ← fixed clickable button
 const videoOverlay   = document.getElementById('videoOverlay');
-const popupVideo     = document.getElementById('popupVideo');
 const successOverlay = document.getElementById('successOverlay');
+const popupVideo     = document.getElementById('popupVideo');
 const subtext        = document.getElementById('subtext');
 const hintText       = document.getElementById('hintText');
-const videoFallback  = document.getElementById('videoFallback');
 
-// ── State ──────────────────────────────────────
+// ── Config ─────────────────────────────────────
 let noCount = 0;
-const MAX_ATTEMPTS = 3;
+const MAX_NO = 3;
 
-// Messages that update subtext after each dodge
-const subtextMessages = [
-    "Think carefully. This is a big moment.",
-    "Interesting choice. Wanna try that again? 🤔",
-    "Bold strategy. One more chance though. 👀",
+const subtextLines = [
+    "I promise good vibes, great company,<br>and at least one laugh. 🌸",
+    "Still here waiting… and I'm very patient. 🥺",
+    "Last chance. I already picked the restaurant. 😌",
 ];
 
-// No button taunts (updates button label)
 const noBtnLabels = [
-    "No 🙄",
-    "Still no 😤",
-    "FINE. No. 😠",
+    "Hmm… no 🙄",
+    "Still no? 😮",
+    "...Really? 😤",
 ];
 
+// Romantic floating particles
+const PARTICLES = ["🌸", "💕", "✨", "🌷", "💌", "🌟", "🫶", "🍀", "🌺", "💗"];
+
+// ── Floating Particles ─────────────────────────
+function spawnParticle() {
+    const container = document.getElementById('particleContainer');
+    const el        = document.createElement('div');
+    el.className    = 'particle';
+    el.textContent  = PARTICLES[Math.floor(Math.random() * PARTICLES.length)];
+
+    const startX  = Math.random() * 100;          // % across screen
+    const dur     = 8 + Math.random() * 10;       // seconds
+    const delay   = Math.random() * 6;            // stagger
+    const size    = 14 + Math.random() * 14;      // px
+
+    el.style.cssText = `
+        left: ${startX}%;
+        font-size: ${size}px;
+        animation-duration: ${dur}s;
+        animation-delay: ${delay}s;
+    `;
+
+    container.appendChild(el);
+    // Remove after animation to keep DOM clean
+    setTimeout(() => el.remove(), (dur + delay) * 1000);
+}
+
+// Spawn a wave of particles, then keep trickling them in
+function initParticles() {
+    for (let i = 0; i < 18; i++) spawnParticle();          // initial burst
+    setInterval(() => spawnParticle(), 1800);               // trickle
+}
+
+initParticles();
 
 // ── Helpers ────────────────────────────────────
-
-/**
- * Returns a random number between min and max.
- */
 function randBetween(min, max) {
     return Math.random() * (max - min) + min;
 }
 
 /**
- * Get safe random position for the No button so it
- * never goes off screen. Uses the button's live size.
+ * Returns x/y coords guaranteed to keep the No button
+ * fully visible inside the viewport, with a buffer so
+ * it never clips the edge on any screen size.
  */
-function getSafePosition(el) {
-    const rect    = el.getBoundingClientRect();
-    const margin  = 16;
-    const maxX    = window.innerWidth  - rect.width  - margin;
-    const maxY    = window.innerHeight - rect.height - margin;
+function getSafePos(el) {
+    const { width, height } = el.getBoundingClientRect();
+    const margin = 20;
+    const maxX   = window.innerWidth  - width  - margin;
+    const maxY   = window.innerHeight - height - margin;
 
-    // Avoid placing the button too close to where it currently is
-    let x, y, attempts = 0;
+    // Try to land far from current position
+    let x, y, tries = 0;
     do {
         x = randBetween(margin, maxX);
         y = randBetween(margin, maxY);
-        attempts++;
+        tries++;
     } while (
-        attempts < 10 &&
-        Math.abs(x - rect.left) < 80 &&
-        Math.abs(y - rect.top)  < 80
+        tries < 12 &&
+        Math.abs(x - el.getBoundingClientRect().left) < 100 &&
+        Math.abs(y - el.getBoundingClientRect().top)  < 100
     );
 
     return { x, y };
 }
 
-/**
- * Launch confetti burst.
- */
+// ── Confetti ───────────────────────────────────
 function launchConfetti() {
-    const container = document.getElementById('confettiContainer');
-    const colors    = ['#f9c846', '#ff5e5e', '#7e6ff7', '#4dd9ac', '#fff', '#ff9de2'];
-    const count     = 120;
+    const canvas = document.getElementById('confettiCanvas');
+    const colors = ['#e0607e', '#f7c5d0', '#ffd6e4', '#c44d70', '#fff', '#ffb3c6', '#ff8fab'];
+    const count  = 130;
 
     for (let i = 0; i < count; i++) {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
+        const p      = document.createElement('div');
+        p.className  = 'cp';
+        const size   = randBetween(7, 15);
+        const left   = randBetween(0, 100);
+        const delay  = randBetween(0, 0.9);
+        const dur    = randBetween(2.4, 4.2);
+        const color  = colors[Math.floor(Math.random() * colors.length)];
+        const skewX  = randBetween(-20, 20);
+        const skewY  = randBetween(-20, 20);
 
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const left  = randBetween(0, 100);
-        const delay = randBetween(0, 0.8);
-        const dur   = randBetween(2.2, 4.0);
-        const size  = randBetween(6, 14);
-        const skew  = randBetween(-30, 30);
-
-        piece.style.cssText = `
-            left: ${left}%;
-            background: ${color};
+        p.style.cssText = `
             width: ${size}px;
             height: ${size}px;
+            left: ${left}%;
+            background: ${color};
+            border-radius: ${Math.random() > 0.5 ? '50%' : '3px'};
             animation-duration: ${dur}s;
             animation-delay: ${delay}s;
-            transform: skew(${skew}deg);
+            transform: skew(${skewX}deg, ${skewY}deg);
         `;
-
-        container.appendChild(piece);
+        canvas.appendChild(p);
     }
 
-    // Clean up after animations finish
-    setTimeout(() => container.innerHTML = '', 5500);
+    setTimeout(() => (canvas.innerHTML = ''), 5500);
 }
 
-
-// ── Core Logic ─────────────────────────────────
-
-/**
- * Called every time the user interacts with No.
- * Runs on mouseenter (desktop) and touchstart (mobile).
- */
-function handleNoInteraction() {
+// ── No Button Logic ────────────────────────────
+function handleNo() {
     noCount++;
 
-    // ── Third strike: show overlay ──────────────
-    if (noCount >= MAX_ATTEMPTS) {
-        triggerVideoOverlay();
+    // Third strike → show video/caught overlay
+    if (noCount >= MAX_NO) {
+        showCaughtOverlay();
         return;
     }
 
-    // ── Move the button ─────────────────────────
-
-    // Make it fixed-position so it can roam the full viewport
+    // Make button free-floating across the whole screen
     if (!noBtn.classList.contains('floating')) {
         noBtn.classList.add('floating');
-        hintText.style.opacity = '0'; // hide hint once button moves
+        hintText.style.opacity = '0';
     }
 
-    const { x, y } = getSafePosition(noBtn);
+    const { x, y } = getSafePos(noBtn);
     noBtn.style.left = x + 'px';
     noBtn.style.top  = y + 'px';
 
-    // Play escape animation
-    noBtn.classList.remove('escaped');
-    void noBtn.offsetWidth; // force reflow to restart animation
-    noBtn.classList.add('escaped');
+    // Pop animation
+    noBtn.classList.remove('popped');
+    void noBtn.offsetWidth;                     // force reflow
+    noBtn.classList.add('popped');
 
     // Update labels
-    const label = noBtn.querySelector('.btn-label');
-    label.textContent = noBtnLabels[noCount] ?? noBtnLabels.at(-1);
-    subtext.textContent = subtextMessages[noCount] ?? subtextMessages.at(-1);
+    noBtn.textContent       = noBtnLabels[noCount] ?? noBtnLabels.at(-1);
+    subtext.innerHTML       = subtextLines[noCount] ?? subtextLines.at(-1);
 }
 
-/**
- * Show the video overlay after 3 attempts.
- */
-function triggerVideoOverlay() {
+// ── Caught Overlay ─────────────────────────────
+function showCaughtOverlay() {
     videoOverlay.classList.add('active');
 
-    // If video has no src or fails, show the text fallback instead
-    if (!popupVideo.currentSrc || popupVideo.error) {
-        showVideoFallback();
+    // Try to play video; if it fails or has no src, show fallback only
+    const hasVideo = popupVideo.querySelector('source')?.src;
+    if (!hasVideo) {
+        popupVideo.style.display = 'none';
     } else {
-        popupVideo.play().catch(() => showVideoFallback());
+        popupVideo.play().catch(() => {
+            popupVideo.style.display = 'none';
+        });
     }
 }
 
-function showVideoFallback() {
-    popupVideo.style.display = 'none';
-    videoFallback.style.display = 'block';
-}
-
-/**
- * Called by the fallback "Fine, YES" button inside the video box.
- */
-function closeVideo() {
-    videoOverlay.classList.remove('active');
-    triggerSuccess();
-}
-
-/**
- * Show the success state.
- */
+// ── Success ────────────────────────────────────
 function triggerSuccess() {
+    // Hide video overlay if open
+    videoOverlay.classList.remove('active');
+
+    // Show success
     successOverlay.classList.add('active');
     launchConfetti();
 }
 
-
 // ── Event Listeners ────────────────────────────
 
-// Yes button
+// Yes button (main card)
 yesBtn.addEventListener('click', triggerSuccess);
 
-// No button — desktop (mouseenter so they can't click it)
-noBtn.addEventListener('mouseenter', handleNoInteraction);
+// "Fine… YES" button inside the caught overlay — fully clickable
+finalYesBtn.addEventListener('click', triggerSuccess);
 
-// No button — mobile (touchstart, since hover doesn't exist)
+// No button — desktop: mouseenter (they can't catch it)
+noBtn.addEventListener('mouseenter', handleNo);
+
+// No button — mobile: touchstart
 noBtn.addEventListener('touchstart', function (e) {
-    e.preventDefault(); // prevent ghost click
-    handleNoInteraction();
+    e.preventDefault();
+    handleNo();
 }, { passive: false });
 
-// Close video overlay if user clicks outside the box
+// Close overlay when clicking dark backdrop
 videoOverlay.addEventListener('click', function (e) {
     if (e.target === videoOverlay) {
-        closeVideo();
+        videoOverlay.classList.remove('active');
     }
 });
-
-// Make closeVideo accessible globally (used by inline onclick in HTML)
-window.closeVideo = closeVideo;

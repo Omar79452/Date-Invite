@@ -3,64 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Important Question</title>
+    <title>A Little Question For You 💌</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Floating background orbs -->
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
-    <div class="bg-orb orb-3"></div>
+    <!-- Floating emoji particles (injected by JS) -->
+    <div id="particleContainer" class="particle-container"></div>
 
-    <!-- Main Card -->
+    <!-- MAIN CARD -->
     <div class="card" id="mainCard">
-        <div class="card-inner">
-            <div class="emoji-burst" id="emojiBurst">🎉</div>
-            <p class="eyebrow">Psst. Hey. You.</p>
-            <h1 class="headline">Would you like to go on a date with me?</h1>
-            <p class="subtext" id="subtext">Think carefully. This is a big moment.</p>
-
-            <div class="button-group" id="buttonGroup">
-                <button class="btn btn-yes" id="yesBtn">
-                    <span class="btn-label">Yes 😎</span>
-                    <span class="btn-shine"></span>
-                </button>
-                <button class="btn btn-no" id="noBtn">
-                    <span class="btn-label">No 🙄</span>
-                </button>
+        <div class="envelope-wrap">
+            <div class="envelope" id="envelope">
+                <div class="env-body"></div>
+                <div class="env-flap"></div>
+                <div class="env-heart">💌</div>
             </div>
-
-            <p class="hint" id="hintText">← Both buttons are totally clickable. Probably.</p>
         </div>
+
+        <p class="eyebrow">A little note, just for you…</p>
+
+        <h1 class="headline" id="headline">
+            Would you like to go<br>on a date with me?
+        </h1>
+
+        <p class="subtext" id="subtext">
+            I promise good vibes, great company,<br>and at least one laugh. 🌸
+        </p>
+
+        <div class="btn-row" id="btnRow">
+            <button class="btn btn-yes" id="yesBtn">
+                Yes, of course! 💕
+                <span class="btn-shine"></span>
+            </button>
+            <button class="btn btn-no" id="noBtn">
+                Hmm… no 🙄
+            </button>
+        </div>
+
+        <p class="hint" id="hintText">Both buttons work. One of them is clearly smarter. 😇</p>
     </div>
 
-    <!-- Success State (replaces card content) -->
-    <div class="success-overlay" id="successOverlay">
+    <!-- SUCCESS SCREEN -->
+    <div class="overlay success-overlay" id="successOverlay">
         <div class="success-box">
-            <div class="success-emoji">😎</div>
-            <h2 class="success-title">Obviously.</h2>
-            <p class="success-sub">Great choice. I'll handle the details.<br>You just show up looking nice.</p>
-            <div class="confetti-container" id="confettiContainer"></div>
+            <div class="success-icon">🥰</div>
+            <h2 class="success-title">She said YES!</h2>
+            <p class="success-msg">
+                I knew you would. 😌<br>
+                Leave the planning to me — you just show up<br>and be your beautiful self. ✨
+            </p>
+            <div class="confetti-canvas" id="confettiCanvas"></div>
         </div>
     </div>
 
-    <!-- Video Overlay -->
-    <div class="video-overlay" id="videoOverlay">
+    <!-- VIDEO / CAUGHT OVERLAY -->
+    <div class="overlay video-overlay" id="videoOverlay">
         <div class="video-box">
-            <p class="video-label">You really tried that 3 times 😭</p>
-            <video id="popupVideo" width="100%" autoplay loop muted playsinline>
-                <source src="reaction.mp4" type="video/mp4">
-                <!-- Fallback if no video file -->
-            </video>
-            <div class="video-fallback" id="videoFallback">
-                <div class="fallback-emoji">🤦</div>
-                <p>Three times. Really.<br>The audacity.</p>
-                <button class="btn btn-yes" onclick="closeVideo()">Fine, YES 😑</button>
+            <div id="videoSection">
+                <p class="video-caption">Okay… you really said no 3 times 😭</p>
+                <video id="popupVideo" width="100%" autoplay loop muted playsinline>
+                    <source src="reaction.mp4" type="video/mp4">
+                </video>
             </div>
+
+            <div class="caught-fallback" id="caughtFallback">
+                <div class="caught-emoji">🫣</div>
+                <p class="caught-text">
+                    Three times?! Come on…<br>
+                    You know you want to say yes.
+                </p>
+            </div>
+
+            <button class="btn btn-yes btn-fullwidth" id="finalYesBtn">
+                Fine… YES 😑💕
+                <span class="btn-shine"></span>
+            </button>
         </div>
     </div>
 
