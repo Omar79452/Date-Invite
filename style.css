@@ -1,0 +1,68 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f6f6f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+p {
+    color: gray;
+}
+
+.buttons {
+    margin-top: 30px;
+    position: relative;
+}
+
+button {
+    padding: 12px 28px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+    transition: 0.3s;
+}
+
+.yes {
+    background: #4CAF50;
+    color: white;
+}
+
+.no {
+    background: #f44336;
+    color: white;
+}
+
+/* Video overlay */
+.video-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-overlay.active {
+    display: flex;
+}
+
+.video-box {
+    width: 400px;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+}
