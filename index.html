@@ -303,7 +303,7 @@
     const hint           = document.getElementById("hint");
 
     /* ── State ─────────────────────────────── */
-    const MAX_NO  = 12;   // trigger overlay after this many attempts
+    const MAX_NO  = 3;   // trigger overlay after this many attempts
     let noCount   = 0;
     let btnW      = 0;
     let btnH      = 0;
@@ -343,13 +343,10 @@
 
     /* ── Safe position ─────────────────────────────────────────────────
        Always keeps the button 60px away from every edge.
-       Does NOT require a minimum travel distance (that was causing the
-       20-tries loop to exhaust on small screens and land unpredictably).
-       Instead we divide the viewport into a 3×3 zone grid and always
-       pick a DIFFERENT zone from where the button currently lives —
-       guaranteeing visible movement while staying fully on-screen.
+       Picks a position in a different 3x3 grid zone.
+       Ensures the new position does not overlap the current mouse/touch position.
     ────────────────────────────────────────────────────────────────── */
-    function safePos() {
+    function safePos(mouseX, mouseY) {
       const EDGE = 60;                          // px from every edge
       const vw   = window.innerWidth;
       const vh   = window.innerHeight;
@@ -364,23 +361,29 @@
       const curZX  = Math.floor(((curX - EDGE) / areaW) * 3);
       const curZY  = Math.floor(((curY - EDGE) / areaH) * 3);
 
-      // Pick any zone that differs on at least one axis
-      let zx, zy, tries = 0;
+      let x, y, overlap, tries = 0;
+
       do {
-        zx = Math.floor(Math.random() * 3);
-        zy = Math.floor(Math.random() * 3);
+        let zx, zy, zoneTries = 0;
+        do {
+          zx = Math.floor(Math.random() * 3);
+          zy = Math.floor(Math.random() * 3);
+          zoneTries++;
+        } while (zoneTries < 30 && zx === curZX && zy === curZY);
+
+        const slotW = areaW / 3;
+        const slotH = areaH / 3;
+        x = EDGE + zx * slotW + Math.random() * slotW;
+        y = EDGE + zy * slotH + Math.random() * slotH;
+
+        // Hard clamp — absolute safety net, never ever outside viewport
+        x = Math.max(EDGE, Math.min(x, vw - btnW - EDGE));
+        y = Math.max(EDGE, Math.min(y, vh - btnH - EDGE));
+
+        overlap = mouseX >= x && mouseX <= x + btnW && mouseY >= y && mouseY <= y + btnH;
+
         tries++;
-      } while (tries < 30 && zx === curZX && zy === curZY);
-
-      // Random position within chosen zone
-      const slotW = areaW / 3;
-      const slotH = areaH / 3;
-      let x = EDGE + zx * slotW + Math.random() * slotW;
-      let y = EDGE + zy * slotH + Math.random() * slotH;
-
-      // Hard clamp — absolute safety net, never ever outside viewport
-      x = Math.max(EDGE, Math.min(x, vw - btnW - EDGE));
-      y = Math.max(EDGE, Math.min(y, vh - btnH - EDGE));
+      } while (overlap && tries < 50);
 
       return { x, y };
     }
@@ -400,17 +403,19 @@
     }
 
     /* ── No button handler ──────────────────── */
-    function handleNo() {
-      /* ── COOLDOWN GUARD ──────────────────────────────────────────────
-         When the button teleports to a new position, the browser may
-         immediately fire another mouseenter if the cursor lands inside
-         the new bounding box. Without this guard, noCount can jump from
-         0 to MAX_NO in a single physical hover, making the button
-         "disappear" instantly. We block re-entry for 500 ms.
-      ─────────────────────────────────────────────────────────────── */
+    function handleNo(e) {
       if (onCooldown) return;
       onCooldown = true;
       setTimeout(() => { onCooldown = false; }, 500);
+
+      let mouseX, mouseY;
+      if (e.type === 'mouseenter') {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      } else if (e.type === 'touchstart') {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+      }
 
       noCount++;
 
@@ -420,29 +425,28 @@
         return;
       }
 
-      /* First move: measure button size & lock it as fixed */
       if (!noBtn.classList.contains("floating")) {
         const r = noBtn.getBoundingClientRect();
         btnW = r.width;
         btnH = r.height;
-        /* Anchor to current visual position before switching to fixed */
         noBtn.style.left = r.left + "px";
         noBtn.style.top  = r.top  + "px";
         noBtn.classList.add("floating");
         hint.style.opacity = "0";
       }
 
-      /* Move to safe zone */
-      const { x, y } = safePos();
+      const { x, y } = safePos(mouseX, mouseY);
       noBtn.style.left = x + "px";
       noBtn.style.top  = y + "px";
 
-      /* Wiggle */
+      // Temporarily disable pointer events for extra safety
+      noBtn.style.pointerEvents = 'none';
+      setTimeout(() => { noBtn.style.pointerEvents = 'auto'; }, 300);
+
       noBtn.classList.remove("popped");
       void noBtn.offsetWidth;
       noBtn.classList.add("popped");
 
-      /* Update labels */
       const idx = Math.min(noCount - 1, noLabels.length - 1);
       noBtn.textContent  = noLabels[idx];
       subtext.innerHTML  = subtexts[Math.min(noCount, subtexts.length - 1)];
@@ -460,7 +464,7 @@
     finalYes.addEventListener("click", showSuccess);
 
     noBtn.addEventListener("mouseenter", handleNo);
-    noBtn.addEventListener("touchstart", e => { e.preventDefault(); handleNo(); }, { passive:false });
+    noBtn.addEventListener("touchstart", e => { e.preventDefault(); handleNo(e); }, { passive:false });
 
     videoOverlay.addEventListener("click", e => {
       if (e.target === videoOverlay) videoOverlay.classList.remove("active");
