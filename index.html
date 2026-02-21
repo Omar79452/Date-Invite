@@ -1,90 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Little Question For You 💌</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>A Little Question 💌</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:       #e0607e;
+      --rose-dark:  #c44d6e;
+      --rose-glow:  rgba(224,96,126,0.32);
+      --blush:      #fff0f4;
+      --card:       #ffffff;
+      --text-dark:  #5a1f35;
+      --text-mid:   #a06078;
+      --text-soft:  #cba0b0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--blush);
+      background-image:
+        radial-gradient(ellipse at 15% 15%, #ffd6e4 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 85%, #fce4f0 0%, transparent 55%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* ── Particles ── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .p {
+      position: absolute;
+      font-size: 18px;
+      opacity: 0;
+      animation: rise linear infinite;
+      user-select: none;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
+      5%   { opacity: .85; }
+      90%  { opacity: .85; }
+      100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative;
+      z-index: 10;
+      background: var(--card);
+      border: 1.5px solid rgba(220,130,160,.18);
+      border-radius: 28px;
+      padding: 52px 44px 44px;
+      max-width: 480px;
+      width: calc(100vw - 36px);
+      text-align: center;
+      box-shadow: 0 28px 70px rgba(200,80,120,.13);
+      animation: cardIn .75s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity:0; transform: translateY(50px) scale(.93); }
+      to   { opacity:1; transform: translateY(0)    scale(1);   }
+    }
+
+    /* ── Envelope ── */
+    .env-wrap { display:flex; justify-content:center; margin-bottom:22px; animation: fadeUp .6s .1s both; }
+    .env {
+      position: relative;
+      width: 78px; height: 58px;
+      animation: float 3.5s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(-2deg); }
+      50%      { transform: translateY(-8px) rotate(2deg); }
+    }
+    .env-body {
+      position:absolute; inset:0;
+      background: linear-gradient(150deg,#fcd0de,#f5a6bf);
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(220,80,130,.22);
+    }
+    .env-flap {
+      position:absolute; top:0; left:0; right:0; height:50%;
+      background: linear-gradient(180deg,#f799b8,#f0b0cc);
+      border-radius: 6px 6px 0 0;
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+    }
+    .env-heart {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:26px; margin-top:10px;
+    }
+
+    /* ── Text ── */
+    .eyebrow {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--rose); margin-bottom: 12px;
+      animation: fadeUp .6s .2s both;
+    }
+    .headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px,5vw,36px);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.3;
+      margin-bottom: 14px;
+      animation: fadeUp .6s .3s both;
+    }
+    .subtext {
+      font-size: 15px; font-weight: 300;
+      color: var(--text-mid); line-height: 1.65;
+      font-style: italic; margin-bottom: 34px;
+      transition: all .35s ease;
+      animation: fadeUp .6s .4s both;
+    }
+    .hint {
+      margin-top: 18px; font-size: 12px;
+      color: var(--text-soft);
+      transition: opacity .4s;
+      animation: fadeUp .6s .65s both;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+      display: flex; gap: 12px;
+      justify-content: center; flex-wrap: wrap;
+      animation: fadeUp .6s .5s both;
+    }
+    .btn {
+      position: relative;
+      padding: 14px 30px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px; font-weight: 700;
+      border: none; border-radius: 60px;
+      cursor: pointer; overflow: hidden;
+      transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .btn:active { transform: scale(.94) !important; }
+
+    .btn-yes {
+      background: linear-gradient(135deg, var(--rose), var(--rose-dark));
+      color: #fff;
+      box-shadow: 0 8px 28px var(--rose-glow);
+    }
+    .btn-yes:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 14px 40px var(--rose-glow);
+    }
+    .shine {
+      position:absolute; inset:0;
+      background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.28) 50%, transparent 65%);
+      transform: translateX(-100%);
+      transition: transform .5s;
+      pointer-events: none;
+    }
+    .btn-yes:hover .shine { transform: translateX(100%); }
+
+    .btn-no {
+      background: transparent;
+      color: var(--text-mid);
+      border: 2px solid #f7c5d0;
+    }
+    .btn-no:hover { border-color: var(--rose); color: var(--rose); transform: translateY(-3px) scale(1.04); }
+    .btn-no.floating { position:fixed !important; z-index:9999; transition:none; pointer-events:auto; }
+
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.18) rotate(-5deg); }
+      65%  { transform: scale(.93) rotate(3deg); }
+      100% { transform: scale(1); }
+    }
+    .btn-no.popped { animation: pop .35s ease forwards; }
+
+    /* ── Overlays shared ── */
+    .overlay {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100; padding: 20px;
+      opacity: 0; pointer-events: none;
+      backdrop-filter: blur(12px);
+      background: rgba(255,230,238,.65);
+      transition: opacity .45s ease;
+    }
+    .overlay.active { opacity:1; pointer-events:all; }
+
+    /* ── Success ── */
+    .success-box {
+      text-align:center;
+      animation: popIn .65s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(.5) rotate(-6deg); opacity:0; }
+      to   { transform: scale(1)  rotate(0);     opacity:1; }
+    }
+    .s-icon { font-size: 90px; display:block; margin-bottom:18px;
+      animation: iconBounce .8s cubic-bezier(.34,1.56,.64,1) .25s both; }
+    @keyframes iconBounce {
+      from { transform: translateY(-50px) scale(.5); opacity:0; }
+      to   { transform: translateY(0)     scale(1);  opacity:1; }
+    }
+    .s-title {
+      font-family:'Playfair Display',serif;
+      font-size: clamp(44px,10vw,72px);
+      color: var(--rose); margin-bottom:14px; line-height:1;
+    }
+    .s-msg { font-size:17px; color:var(--text-mid); line-height:1.7; font-style:italic; }
+
+    /* confetti */
+    #confetti { position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden; }
+    .cp {
+      position:absolute; top:-14px; border-radius:3px;
+      animation: cpFall linear forwards;
+    }
+    @keyframes cpFall {
+      0%   { transform:translateY(0) rotate(0);    opacity:1; }
+      85%  { opacity:1; }
+      100% { transform:translateY(110vh) rotate(800deg); opacity:0; }
+    }
+
+    /* ── Video / Caught ── */
+    .video-overlay { z-index:120; }
+    .video-box {
+      background: var(--card);
+      border: 1.5px solid rgba(220,130,160,.18);
+      border-radius: 28px;
+      padding: 28px;
+      max-width: 420px; width:100%;
+      text-align:center;
+      box-shadow: 0 28px 70px rgba(200,80,120,.13);
+      animation: cardIn .5s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    .v-caption {
+      font-family:'Playfair Display',serif;
+      font-size:20px; font-style:italic;
+      color:var(--text-dark); margin-bottom:16px;
+    }
+    video { border-radius:14px; display:block; width:100%; max-height:220px; object-fit:cover; }
+    .caught-emoji { font-size:60px; display:block; margin:8px 0 14px; }
+    .caught-text {
+      font-family:'Playfair Display',serif;
+      font-size:18px; font-style:italic;
+      color:var(--text-dark); line-height:1.6; margin-bottom:0;
+    }
+    .btn-full { width:100%; margin-top:22px; font-size:16px; padding:16px; }
+
+    /* ── Responsive ── */
+    @media(max-width:480px){
+      .card { padding:38px 22px 34px; }
+      .btn-row { flex-direction:column; align-items:center; }
+      .btn { width:100%; max-width:270px; }
+      .btn-no.floating { width:auto !important; max-width:none !important; }
+      .s-icon { font-size:72px; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Floating emoji particles (injected by JS) -->
-    <div id="particleContainer" class="particle-container"></div>
+  <!-- Particles -->
+  <div id="particles"></div>
 
-    <!-- MAIN CARD -->
-    <div class="card" id="mainCard">
-        <div class="envelope-wrap">
-            <div class="envelope" id="envelope">
-                <div class="env-body"></div>
-                <div class="env-flap"></div>
-                <div class="env-heart">💌</div>
-            </div>
-        </div>
-
-        <p class="eyebrow">A little note, just for you…</p>
-
-        <h1 class="headline" id="headline">
-            Would you like to go<br>on a date with me?
-        </h1>
-
-        <p class="subtext" id="subtext">
-            I promise good vibes, great company,<br>and at least one laugh. 🌸
-        </p>
-
-        <div class="btn-row" id="btnRow">
-            <button class="btn btn-yes" id="yesBtn">
-                Yes, of course! 💕
-                <span class="btn-shine"></span>
-            </button>
-            <button class="btn btn-no" id="noBtn">
-                Hmm… no 🙄
-            </button>
-        </div>
-
-        <p class="hint" id="hintText">Both buttons work. One of them is clearly smarter. 😇</p>
+  <!-- ══ MAIN CARD ══ -->
+  <div class="card" id="card">
+    <div class="env-wrap">
+      <div class="env">
+        <div class="env-body"></div>
+        <div class="env-flap"></div>
+        <div class="env-heart">💌</div>
+      </div>
     </div>
 
-    <!-- SUCCESS SCREEN -->
-    <div class="overlay success-overlay" id="successOverlay">
-        <div class="success-box">
-            <div class="success-icon">🥰</div>
-            <h2 class="success-title">She said YES!</h2>
-            <p class="success-msg">
-                I knew you would. 😌<br>
-                Leave the planning to me — you just show up<br>and be your beautiful self. ✨
-            </p>
-            <div class="confetti-canvas" id="confettiCanvas"></div>
-        </div>
+    <p class="eyebrow">A little note, just for you…</p>
+    <h1 class="headline">Would you like to go<br>on a date with me?</h1>
+    <p class="subtext" id="subtext">
+      I promise good vibes, great company,<br>and at least one laugh. 🌸
+    </p>
+
+    <div class="btn-row">
+      <button class="btn btn-yes" id="yesBtn">
+        Yes, of course! 💕<span class="shine"></span>
+      </button>
+      <button class="btn btn-no" id="noBtn">Hmm… no 🙄</button>
     </div>
 
-    <!-- VIDEO / CAUGHT OVERLAY -->
-    <div class="overlay video-overlay" id="videoOverlay">
-        <div class="video-box">
-            <div id="videoSection">
-                <p class="video-caption">Okay… you really said no 3 times 😭</p>
-                <video id="popupVideo" width="100%" autoplay loop muted playsinline>
-                    <source src="reaction.mp4" type="video/mp4">
-                </video>
-            </div>
+    <p class="hint" id="hint">Both buttons work. One of them is clearly smarter. 😇</p>
+  </div>
 
-            <div class="caught-fallback" id="caughtFallback">
-                <div class="caught-emoji">🫣</div>
-                <p class="caught-text">
-                    Three times?! Come on…<br>
-                    You know you want to say yes.
-                </p>
-            </div>
 
-            <button class="btn btn-yes btn-fullwidth" id="finalYesBtn">
-                Fine… YES 😑💕
-                <span class="btn-shine"></span>
-            </button>
-        </div>
+  <!-- ══ SUCCESS ══ -->
+  <div class="overlay" id="successOverlay">
+    <div class="success-box">
+      <span class="s-icon">🥰</span>
+      <h2 class="s-title">She said YES!</h2>
+      <p class="s-msg">
+        I knew you would. 😌<br>
+        Leave the planning to me — you just show up<br>and be your beautiful self. ✨
+      </p>
+      <div id="confetti"></div>
     </div>
+  </div>
 
-    <script src="script.js"></script>
+
+  <!-- ══ CAUGHT OVERLAY ══ -->
+  <div class="overlay video-overlay" id="videoOverlay">
+    <div class="video-box">
+      <p class="v-caption">You really said no 3 times… 😭</p>
+
+      <video id="vid" autoplay loop muted playsinline>
+        <source src="reaction.mp4" type="video/mp4"/>
+      </video>
+
+      <span class="caught-emoji">🫣</span>
+      <p class="caught-text">
+        Three times?! Come on…<br>You know you want to say yes.
+      </p>
+
+      <button class="btn btn-yes btn-full" id="finalYes">
+        Fine… YES 😑💕<span class="shine"></span>
+      </button>
+    </div>
+  </div>
+
+
+  <script>
+    /* ── Particles ──────────────────────────────── */
+    const EMOJIS = ["🌸","💕","✨","🌷","💌","🌟","🫶","🍀","🌺","💗"];
+    const pBox   = document.getElementById("particles");
+
+    function spawnParticle() {
+      const el  = document.createElement("div");
+      el.className = "p";
+      el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+      const dur   = 9 + Math.random() * 9;
+      const delay = Math.random() * 5;
+      el.style.cssText = `
+        left:${Math.random()*100}%;
+        font-size:${14+Math.random()*14}px;
+        animation-duration:${dur}s;
+        animation-delay:${delay}s;
+      `;
+      pBox.appendChild(el);
+      setTimeout(() => el.remove(), (dur + delay) * 1000);
+    }
+    for (let i = 0; i < 20; i++) spawnParticle();
+    setInterval(spawnParticle, 1800);
+
+
+    /* ── State & elements ───────────────────────── */
+    const yesBtn        = document.getElementById("yesBtn");
+    const noBtn         = document.getElementById("noBtn");
+    const finalYes      = document.getElementById("finalYes");
+    const successOverlay= document.getElementById("successOverlay");
+    const videoOverlay  = document.getElementById("videoOverlay");
+    const vid           = document.getElementById("vid");
+    const subtext       = document.getElementById("subtext");
+    const hint          = document.getElementById("hint");
+
+    let noCount = 0;
+
+    const subtexts = [
+      "I promise good vibes, great company,<br>and at least one laugh. 🌸",
+      "Still here waiting… and I'm very patient. 🥺",
+      "Last chance. I already picked the restaurant. 😌",
+    ];
+    const noLabels = ["Hmm… no 🙄", "Still no? 😮", "...Really? 😤"];
+
+
+    /* ── Helpers ────────────────────────────────── */
+    function rand(a, b) { return Math.random() * (b - a) + a; }
+
+    function safePos(el) {
+      const r = el.getBoundingClientRect();
+      const m = 20;
+      const maxX = window.innerWidth  - r.width  - m;
+      const maxY = window.innerHeight - r.height - m;
+      let x, y, t = 0;
+      do {
+        x = rand(m, maxX);
+        y = rand(m, maxY);
+        t++;
+      } while (t < 10 && Math.abs(x - r.left) < 90 && Math.abs(y - r.top) < 90);
+      return { x, y };
+    }
+
+    function confetti() {
+      const box    = document.getElementById("confetti");
+      const colors = ["#e0607e","#f7c5d0","#ffd6e4","#c44d70","#fff","#ffb3c6","#ff8fab"];
+      for (let i = 0; i < 130; i++) {
+        const cp   = document.createElement("div");
+        cp.className = "cp";
+        const size = rand(7,15), dur = rand(2.4,4.2), delay = rand(0,.9);
+        cp.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${rand(0,100)}%;
+          background:${colors[Math.floor(Math.random()*colors.length)]};
+          border-radius:${Math.random()>.5?"50%":"3px"};
+          animation-duration:${dur}s;
+          animation-delay:${delay}s;
+          transform:skew(${rand(-20,20)}deg,${rand(-20,20)}deg);
+        `;
+        box.appendChild(cp);
+      }
+      setTimeout(() => box.innerHTML = "", 5500);
+    }
+
+
+    /* ── No button logic ────────────────────────── */
+    function handleNo() {
+      noCount++;
+
+      if (noCount >= 3) {
+        videoOverlay.classList.add("active");
+        vid.play().catch(() => {});   // play if available, silently ignore if not
+        return;
+      }
+
+      if (!noBtn.classList.contains("floating")) {
+        noBtn.classList.add("floating");
+        hint.style.opacity = "0";
+      }
+
+      const { x, y } = safePos(noBtn);
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+
+      noBtn.classList.remove("popped");
+      void noBtn.offsetWidth;
+      noBtn.classList.add("popped");
+
+      noBtn.textContent    = noLabels[noCount] ?? noLabels.at(-1);
+      subtext.innerHTML    = subtexts[noCount] ?? subtexts.at(-1);
+    }
+
+
+    /* ── Success ────────────────────────────────── */
+    function showSuccess() {
+      videoOverlay.classList.remove("active");
+      successOverlay.classList.add("active");
+      confetti();
+    }
+
+
+    /* ── Listeners ──────────────────────────────── */
+    yesBtn.addEventListener("click", showSuccess);
+    finalYes.addEventListener("click", showSuccess);   // ← fully clickable
+
+    noBtn.addEventListener("mouseenter", handleNo);
+    noBtn.addEventListener("touchstart", e => { e.preventDefault(); handleNo(); }, { passive: false });
+
+    videoOverlay.addEventListener("click", e => {
+      if (e.target === videoOverlay) videoOverlay.classList.remove("active");
+    });
+  </script>
 </body>
 </html>
