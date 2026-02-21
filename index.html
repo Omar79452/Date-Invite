@@ -22,10 +22,7 @@
       --text-soft:  #cba0b0;
     }
 
-    html, body {
-      height: 100%;
-      overflow: hidden;
-    }
+    html, body { height: 100%; overflow: hidden; }
 
     body {
       font-family: 'Nunito', sans-serif;
@@ -40,68 +37,54 @@
     }
 
     /* ── Particles ── */
-    #particles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
+    #particles { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
     .p {
-      position: absolute;
-      font-size: 18px;
-      opacity: 0;
+      position:absolute; font-size:18px; opacity:0;
       animation: rise linear infinite;
-      user-select: none;
+      user-select:none;
     }
     @keyframes rise {
-      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0; }
-      5%   { opacity: .85; }
-      90%  { opacity: .85; }
-      100% { transform: translateY(-15vh) rotate(360deg); opacity: 0; }
+      0%   { transform:translateY(110vh) rotate(0deg);   opacity:0; }
+      5%   { opacity:.85; }
+      90%  { opacity:.85; }
+      100% { transform:translateY(-15vh) rotate(360deg); opacity:0; }
     }
 
     /* ── Card ── */
     .card {
-      position: relative;
-      z-index: 10;
-      background: var(--card);
-      border: 1.5px solid rgba(220,130,160,.18);
-      border-radius: 28px;
-      padding: 52px 44px 44px;
-      max-width: 480px;
-      width: calc(100vw - 36px);
-      text-align: center;
-      box-shadow: 0 28px 70px rgba(200,80,120,.13);
-      animation: cardIn .75s cubic-bezier(.34,1.56,.64,1) both;
+      position:relative; z-index:10;
+      background:var(--card);
+      border:1.5px solid rgba(220,130,160,.18);
+      border-radius:28px;
+      padding:52px 44px 44px;
+      max-width:480px; width:calc(100vw - 36px);
+      text-align:center;
+      box-shadow:0 28px 70px rgba(200,80,120,.13);
+      animation:cardIn .75s cubic-bezier(.34,1.56,.64,1) both;
     }
     @keyframes cardIn {
-      from { opacity:0; transform: translateY(50px) scale(.93); }
-      to   { opacity:1; transform: translateY(0)    scale(1);   }
+      from { opacity:0; transform:translateY(50px) scale(.93); }
+      to   { opacity:1; transform:translateY(0) scale(1); }
     }
 
     /* ── Envelope ── */
-    .env-wrap { display:flex; justify-content:center; margin-bottom:22px; animation: fadeUp .6s .1s both; }
-    .env {
-      position: relative;
-      width: 78px; height: 58px;
-      animation: float 3.5s ease-in-out infinite;
-    }
+    .env-wrap { display:flex; justify-content:center; margin-bottom:22px; animation:fadeUp .6s .1s both; }
+    .env { position:relative; width:78px; height:58px; animation:float 3.5s ease-in-out infinite; }
     @keyframes float {
-      0%,100% { transform: translateY(0) rotate(-2deg); }
-      50%      { transform: translateY(-8px) rotate(2deg); }
+      0%,100% { transform:translateY(0) rotate(-2deg); }
+      50%      { transform:translateY(-8px) rotate(2deg); }
     }
     .env-body {
       position:absolute; inset:0;
-      background: linear-gradient(150deg,#fcd0de,#f5a6bf);
-      border-radius: 6px;
-      box-shadow: 0 8px 24px rgba(220,80,130,.22);
+      background:linear-gradient(150deg,#fcd0de,#f5a6bf);
+      border-radius:6px;
+      box-shadow:0 8px 24px rgba(220,80,130,.22);
     }
     .env-flap {
       position:absolute; top:0; left:0; right:0; height:50%;
-      background: linear-gradient(180deg,#f799b8,#f0b0cc);
-      border-radius: 6px 6px 0 0;
-      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      background:linear-gradient(180deg,#f799b8,#f0b0cc);
+      border-radius:6px 6px 0 0;
+      clip-path:polygon(0 0,50% 100%,100% 0);
     }
     .env-heart {
       position:absolute; inset:0;
@@ -111,122 +94,126 @@
 
     /* ── Text ── */
     .eyebrow {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: .18em; text-transform: uppercase;
-      color: var(--rose); margin-bottom: 12px;
-      animation: fadeUp .6s .2s both;
+      font-size:11px; font-weight:700;
+      letter-spacing:.18em; text-transform:uppercase;
+      color:var(--rose); margin-bottom:12px;
+      animation:fadeUp .6s .2s both;
     }
     .headline {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(24px,5vw,36px);
-      font-weight: 700;
-      color: var(--text-dark);
-      line-height: 1.3;
-      margin-bottom: 14px;
-      animation: fadeUp .6s .3s both;
+      font-family:'Playfair Display',serif;
+      font-size:clamp(24px,5vw,36px); font-weight:700;
+      color:var(--text-dark); line-height:1.3; margin-bottom:14px;
+      animation:fadeUp .6s .3s both;
     }
     .subtext {
-      font-size: 15px; font-weight: 300;
-      color: var(--text-mid); line-height: 1.65;
-      font-style: italic; margin-bottom: 34px;
-      transition: all .35s ease;
-      animation: fadeUp .6s .4s both;
+      font-size:15px; font-weight:300;
+      color:var(--text-mid); line-height:1.65;
+      font-style:italic; margin-bottom:34px;
+      transition:all .35s ease;
+      animation:fadeUp .6s .4s both;
     }
     .hint {
-      margin-top: 18px; font-size: 12px;
-      color: var(--text-soft);
-      transition: opacity .4s;
-      animation: fadeUp .6s .65s both;
+      margin-top:18px; font-size:12px;
+      color:var(--text-soft);
+      transition:opacity .4s;
+      animation:fadeUp .6s .65s both;
     }
     @keyframes fadeUp {
-      from { opacity:0; transform: translateY(16px); }
-      to   { opacity:1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
     /* ── Buttons ── */
     .btn-row {
-      display: flex; gap: 12px;
-      justify-content: center; flex-wrap: wrap;
-      animation: fadeUp .6s .5s both;
+      display:flex; gap:12px;
+      justify-content:center; flex-wrap:wrap;
+      animation:fadeUp .6s .5s both;
     }
     .btn {
-      position: relative;
-      padding: 14px 30px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 15px; font-weight: 700;
-      border: none; border-radius: 60px;
-      cursor: pointer; overflow: hidden;
-      transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
+      position:relative;
+      padding:14px 30px;
+      font-family:'Nunito',sans-serif;
+      font-size:15px; font-weight:700;
+      border:none; border-radius:60px;
+      cursor:pointer; overflow:hidden;
+      transition:transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
     }
-    .btn:active { transform: scale(.94) !important; }
+    .btn:active { transform:scale(.94) !important; }
 
     .btn-yes {
-      background: linear-gradient(135deg, var(--rose), var(--rose-dark));
-      color: #fff;
-      box-shadow: 0 8px 28px var(--rose-glow);
+      background:linear-gradient(135deg, var(--rose), var(--rose-dark));
+      color:#fff;
+      box-shadow:0 8px 28px var(--rose-glow);
     }
     .btn-yes:hover {
-      transform: translateY(-3px) scale(1.04);
-      box-shadow: 0 14px 40px var(--rose-glow);
+      transform:translateY(-3px) scale(1.04);
+      box-shadow:0 14px 40px var(--rose-glow);
     }
     .shine {
       position:absolute; inset:0;
-      background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.28) 50%, transparent 65%);
-      transform: translateX(-100%);
-      transition: transform .5s;
-      pointer-events: none;
+      background:linear-gradient(110deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);
+      transform:translateX(-100%);
+      transition:transform .5s;
+      pointer-events:none;
     }
-    .btn-yes:hover .shine { transform: translateX(100%); }
+    .btn-yes:hover .shine { transform:translateX(100%); }
 
     .btn-no {
-      background: transparent;
-      color: var(--text-mid);
-      border: 2px solid #f7c5d0;
+      background:transparent;
+      color:var(--text-mid);
+      border:2px solid #f7c5d0;
     }
-    .btn-no:hover { border-color: var(--rose); color: var(--rose); transform: translateY(-3px) scale(1.04); }
-    .btn-no.floating { position:fixed !important; z-index:9999; transition:none; pointer-events:auto; }
+    .btn-no:hover { border-color:var(--rose); color:var(--rose); transform:translateY(-3px) scale(1.04); }
+
+    /* ── No button floating state ── */
+    /* When floating, we control position via JS only — no CSS transition so it snaps instantly */
+    .btn-no.floating {
+      position:fixed !important;
+      z-index:9999;
+      transition:none !important;
+      pointer-events:auto;
+    }
 
     @keyframes pop {
-      0%   { transform: scale(1); }
-      30%  { transform: scale(1.18) rotate(-5deg); }
-      65%  { transform: scale(.93) rotate(3deg); }
-      100% { transform: scale(1); }
+      0%   { transform:scale(1); }
+      30%  { transform:scale(1.15) rotate(-4deg); }
+      65%  { transform:scale(.95) rotate(3deg); }
+      100% { transform:scale(1); }
     }
-    .btn-no.popped { animation: pop .35s ease forwards; }
+    .btn-no.popped { animation:pop .3s ease forwards; }
 
     /* ── Overlays shared ── */
     .overlay {
-      position: fixed; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 100; padding: 20px;
-      opacity: 0; pointer-events: none;
-      backdrop-filter: blur(12px);
-      background: rgba(255,230,238,.65);
-      transition: opacity .45s ease;
+      position:fixed; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      z-index:100; padding:20px;
+      opacity:0; pointer-events:none;
+      backdrop-filter:blur(12px);
+      background:rgba(255,230,238,.65);
+      transition:opacity .45s ease;
     }
     .overlay.active { opacity:1; pointer-events:all; }
 
     /* ── Success ── */
-    .success-box {
-      text-align:center;
-      animation: popIn .65s cubic-bezier(.34,1.56,.64,1) both;
-    }
+    .success-box { text-align:center; animation:popIn .65s cubic-bezier(.34,1.56,.64,1) both; }
     @keyframes popIn {
-      from { transform: scale(.5) rotate(-6deg); opacity:0; }
-      to   { transform: scale(1)  rotate(0);     opacity:1; }
+      from { transform:scale(.5) rotate(-6deg); opacity:0; }
+      to   { transform:scale(1) rotate(0); opacity:1; }
     }
-    .s-icon { font-size: 90px; display:block; margin-bottom:18px;
-      animation: iconBounce .8s cubic-bezier(.34,1.56,.64,1) .25s both; }
+    .s-icon {
+      font-size:90px; display:block; margin-bottom:18px;
+      animation:iconBounce .8s cubic-bezier(.34,1.56,.64,1) .25s both;
+    }
     @keyframes iconBounce {
-      from { transform: translateY(-50px) scale(.5); opacity:0; }
-      to   { transform: translateY(0)     scale(1);  opacity:1; }
+      from { transform:translateY(-50px) scale(.5); opacity:0; }
+      to   { transform:translateY(0) scale(1); opacity:1; }
     }
     .s-title {
       font-family:'Playfair Display',serif;
-      font-size: clamp(44px,10vw,72px);
-      color: var(--rose); margin-bottom:14px; line-height:1;
+      font-size:clamp(44px,10vw,72px);
+      color:var(--rose); margin-bottom:14px; line-height:1;
     }
     .s-msg { font-size:17px; color:var(--text-mid); line-height:1.7; font-style:italic; }
 
@@ -234,39 +221,55 @@
     #confetti { position:fixed; inset:0; pointer-events:none; z-index:-1; overflow:hidden; }
     .cp {
       position:absolute; top:-14px; border-radius:3px;
-      animation: cpFall linear forwards;
+      animation:cpFall linear forwards;
     }
     @keyframes cpFall {
-      0%   { transform:translateY(0) rotate(0);    opacity:1; }
+      0%   { transform:translateY(0) rotate(0); opacity:1; }
       85%  { opacity:1; }
       100% { transform:translateY(110vh) rotate(800deg); opacity:0; }
     }
 
-    /* ── Video / Caught ── */
-    .video-overlay { z-index:120; }
+    /* ── Video / Caught overlay ── */
+    .video-overlay { z-index:120; align-items:center; }
+
     .video-box {
-      background: var(--card);
-      border: 1.5px solid rgba(220,130,160,.18);
-      border-radius: 28px;
-      padding: 28px;
-      max-width: 420px; width:100%;
+      background:var(--card);
+      border:1.5px solid rgba(220,130,160,.18);
+      border-radius:28px;
+      /* FIX: wider box, auto height, scrollable on very small screens */
+      max-width:520px; width:calc(100vw - 32px);
+      max-height:calc(100vh - 40px);
+      overflow-y:auto;
+      padding:28px 28px 24px;
       text-align:center;
-      box-shadow: 0 28px 70px rgba(200,80,120,.13);
-      animation: cardIn .5s cubic-bezier(.34,1.56,.64,1) both;
+      box-shadow:0 28px 70px rgba(200,80,120,.13);
+      animation:cardIn .5s cubic-bezier(.34,1.56,.64,1) both;
     }
+
     .v-caption {
       font-family:'Playfair Display',serif;
-      font-size:20px; font-style:italic;
-      color:var(--text-dark); margin-bottom:16px;
+      font-size:19px; font-style:italic;
+      color:var(--text-dark); margin-bottom:14px;
     }
-    video { border-radius:14px; display:block; width:100%; max-height:220px; object-fit:cover; }
-    .caught-emoji { font-size:60px; display:block; margin:8px 0 14px; }
+
+    /* FIX: video fills the box properly, aspect-ratio preserved */
+    video {
+      display:block;
+      width:100%;
+      height:auto;
+      max-height:min(360px, 42vh);
+      border-radius:16px;
+      object-fit:contain;
+      background:#111;
+    }
+
+    .caught-emoji { font-size:54px; display:block; margin:16px 0 10px; }
     .caught-text {
       font-family:'Playfair Display',serif;
-      font-size:18px; font-style:italic;
-      color:var(--text-dark); line-height:1.6; margin-bottom:0;
+      font-size:17px; font-style:italic;
+      color:var(--text-dark); line-height:1.6;
     }
-    .btn-full { width:100%; margin-top:22px; font-size:16px; padding:16px; }
+    .btn-full { width:100%; margin-top:20px; font-size:16px; padding:15px; }
 
     /* ── Responsive ── */
     @media(max-width:480px){
@@ -280,7 +283,6 @@
 </head>
 <body>
 
-  <!-- Particles -->
   <div id="particles"></div>
 
   <!-- ══ MAIN CARD ══ -->
@@ -346,15 +348,15 @@
 
 
   <script>
-    /* ── Particles ──────────────────────────────── */
+    /* ── Particles ─────────────────────────────── */
     const EMOJIS = ["🌸","💕","✨","🌷","💌","🌟","🫶","🍀","🌺","💗"];
     const pBox   = document.getElementById("particles");
 
     function spawnParticle() {
-      const el  = document.createElement("div");
+      const el = document.createElement("div");
       el.className = "p";
       el.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-      const dur   = 9 + Math.random() * 9;
+      const dur = 9 + Math.random() * 9;
       const delay = Math.random() * 5;
       el.style.cssText = `
         left:${Math.random()*100}%;
@@ -369,17 +371,19 @@
     setInterval(spawnParticle, 1800);
 
 
-    /* ── State & elements ───────────────────────── */
-    const yesBtn        = document.getElementById("yesBtn");
-    const noBtn         = document.getElementById("noBtn");
-    const finalYes      = document.getElementById("finalYes");
-    const successOverlay= document.getElementById("successOverlay");
-    const videoOverlay  = document.getElementById("videoOverlay");
-    const vid           = document.getElementById("vid");
-    const subtext       = document.getElementById("subtext");
-    const hint          = document.getElementById("hint");
+    /* ── Elements & state ──────────────────────── */
+    const yesBtn         = document.getElementById("yesBtn");
+    const noBtn          = document.getElementById("noBtn");
+    const finalYes       = document.getElementById("finalYes");
+    const successOverlay = document.getElementById("successOverlay");
+    const videoOverlay   = document.getElementById("videoOverlay");
+    const vid            = document.getElementById("vid");
+    const subtext        = document.getElementById("subtext");
+    const hint           = document.getElementById("hint");
 
-    let noCount = 0;
+    let noCount   = 0;
+    let btnW      = 0;   // measured once, reused every move
+    let btnH      = 0;
 
     const subtexts = [
       "I promise good vibes, great company,<br>and at least one laugh. 🌸",
@@ -389,38 +393,69 @@
     const noLabels = ["Hmm… no 🙄", "Still no? 😮", "...Really? 😤"];
 
 
-    /* ── Helpers ────────────────────────────────── */
-    function rand(a, b) { return Math.random() * (b - a) + a; }
+    /* ── Safe position — FIXED ─────────────────────
+       Key changes vs old version:
+       1. We measure the button ONCE before it goes floating,
+          so getBoundingClientRect() is always reliable.
+       2. We use a generous edge margin (48px) so it never
+          gets close to any viewport border.
+       3. Movement is capped to a smaller zone (25%–75% of
+          viewport) so the button always stays in the middle
+          region — never flies into a corner.
+       4. We avoid placing it near its CURRENT position by
+          requiring at least 120px of movement each time.
+    ─────────────────────────────────────────────── */
+    function safePos() {
+      const margin  = 48;
+      const vw      = window.innerWidth;
+      const vh      = window.innerHeight;
 
-    function safePos(el) {
-      const r = el.getBoundingClientRect();
-      const m = 20;
-      const maxX = window.innerWidth  - r.width  - m;
-      const maxY = window.innerHeight - r.height - m;
-      let x, y, t = 0;
+      // Keep movement inside the comfortable center zone
+      const minX = Math.max(margin, vw * 0.10);
+      const maxX = Math.min(vw - btnW - margin, vw * 0.85);
+      const minY = Math.max(margin, vh * 0.10);
+      const maxY = Math.min(vh - btnH - margin, vh * 0.85);
+
+      // Current position
+      const curX = parseFloat(noBtn.style.left) || vw / 2;
+      const curY = parseFloat(noBtn.style.top)  || vh / 2;
+
+      let x, y, tries = 0;
       do {
-        x = rand(m, maxX);
-        y = rand(m, maxY);
-        t++;
-      } while (t < 10 && Math.abs(x - r.left) < 90 && Math.abs(y - r.top) < 90);
+        x = minX + Math.random() * (maxX - minX);
+        y = minY + Math.random() * (maxY - minY);
+        tries++;
+      } while (
+        tries < 20 && (
+          Math.abs(x - curX) < 120 ||   // must move meaningfully
+          Math.abs(y - curY) < 80
+        )
+      );
+
+      // Hard clamp as final safety net
+      x = Math.max(margin, Math.min(x, vw - btnW - margin));
+      y = Math.max(margin, Math.min(y, vh - btnH - margin));
+
       return { x, y };
     }
 
+
+    /* ── Confetti ──────────────────────────────── */
     function confetti() {
       const box    = document.getElementById("confetti");
       const colors = ["#e0607e","#f7c5d0","#ffd6e4","#c44d70","#fff","#ffb3c6","#ff8fab"];
       for (let i = 0; i < 130; i++) {
-        const cp   = document.createElement("div");
+        const cp  = document.createElement("div");
         cp.className = "cp";
-        const size = rand(7,15), dur = rand(2.4,4.2), delay = rand(0,.9);
+        const r = (a,b) => a + Math.random()*(b-a);
         cp.style.cssText = `
-          width:${size}px; height:${size}px;
-          left:${rand(0,100)}%;
+          width:${r(7,15)}px; height:${r(7,15)}px;
+          left:${r(0,100)}%;
           background:${colors[Math.floor(Math.random()*colors.length)]};
           border-radius:${Math.random()>.5?"50%":"3px"};
-          animation-duration:${dur}s;
-          animation-delay:${delay}s;
-          transform:skew(${rand(-20,20)}deg,${rand(-20,20)}deg);
+          animation-duration:${r(2.4,4.2)}s;
+          animation-delay:${r(0,.9)}s;
+          transform:skew(${r(-20,20)}deg,${r(-20,20)}deg);
         `;
         box.appendChild(cp);
       }
@@ -428,35 +463,45 @@
     }
 
 
-    /* ── No button logic ────────────────────────── */
+    /* ── No button ─────────────────────────────── */
     function handleNo() {
       noCount++;
 
       if (noCount >= 3) {
         videoOverlay.classList.add("active");
-        vid.play().catch(() => {});   // play if available, silently ignore if not
+        vid.play().catch(() => {});
         return;
       }
 
+      // Measure button size exactly once before going fixed
       if (!noBtn.classList.contains("floating")) {
+        const r = noBtn.getBoundingClientRect();
+        btnW = r.width;
+        btnH = r.height;
+
+        // Anchor current position before switching to fixed
+        noBtn.style.left = r.left + "px";
+        noBtn.style.top  = r.top  + "px";
         noBtn.classList.add("floating");
         hint.style.opacity = "0";
       }
 
-      const { x, y } = safePos(noBtn);
+      const { x, y } = safePos();
       noBtn.style.left = x + "px";
       noBtn.style.top  = y + "px";
 
+      // Pop wiggle
       noBtn.classList.remove("popped");
       void noBtn.offsetWidth;
       noBtn.classList.add("popped");
 
-      noBtn.textContent    = noLabels[noCount] ?? noLabels.at(-1);
-      subtext.innerHTML    = subtexts[noCount] ?? subtexts.at(-1);
+      // Update text (keep span.shine inside yes-btn safe)
+      noBtn.textContent = noLabels[Math.min(noCount, noLabels.length - 1)];
+      subtext.innerHTML = subtexts[Math.min(noCount, subtexts.length - 1)];
     }
 
 
-    /* ── Success ────────────────────────────────── */
+    /* ── Success ───────────────────────────────── */
     function showSuccess() {
       videoOverlay.classList.remove("active");
       successOverlay.classList.add("active");
@@ -464,12 +509,15 @@
     }
 
 
-    /* ── Listeners ──────────────────────────────── */
+    /* ── Listeners ─────────────────────────────── */
     yesBtn.addEventListener("click", showSuccess);
-    finalYes.addEventListener("click", showSuccess);   // ← fully clickable
+    finalYes.addEventListener("click", showSuccess);
 
     noBtn.addEventListener("mouseenter", handleNo);
-    noBtn.addEventListener("touchstart", e => { e.preventDefault(); handleNo(); }, { passive: false });
+    noBtn.addEventListener("touchstart", e => {
+      e.preventDefault();
+      handleNo();
+    }, { passive: false });
 
     videoOverlay.addEventListener("click", e => {
       if (e.target === videoOverlay) videoOverlay.classList.remove("active");
