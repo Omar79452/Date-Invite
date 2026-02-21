@@ -307,7 +307,10 @@
     let noCount   = 0;
     let btnW      = 0;
     let btnH      = 0;
-    let onCooldown = false;  // ← blocks rapid re-fires from mouseenter cascade
+    let onCooldown = false;  // ← blocks rapid re-fires
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let proximityMode = false;
 
     /* Subtext messages — enough for 12 rounds */
     const subtexts = [
@@ -341,55 +344,24 @@
       "...okay fine 😤",
     ];
 
-    /* ── Safe position ─────────────────────────────────────────────────
-       Always keeps the button 60px away from every edge.
-       Picks a position in a different 3x3 grid zone.
-       Ensures the new position does not overlap or come within 50px buffer of the current mouse/touch position.
-    ────────────────────────────────────────────────────────────────── */
-    function safePos(mouseX, mouseY) {
-      const EDGE = 60;                          // px from every edge
-      const BUFFER = 50;                        // extra buffer around button to avoid near-miss triggers
-      const vw   = window.innerWidth;
-      const vh   = window.innerHeight;
+    /* ── Safe position ───────────────────────────────────────────────── */
+    function safePos(currentX, currentY) {
+      const EDGE = 30;  // Reduced edge margin for better visibility on small screens
+      const BUFFER = 100;  // Increased buffer to avoid landing near cursor
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
-      // Usable area
-      const areaW = vw - btnW - EDGE * 2;
-      const areaH = vh - btnH - EDGE * 2;
-
-      // Current zone (0–2 in each axis)
-      const curX   = parseFloat(noBtn.style.left) || (vw / 2 - btnW / 2);
-      const curY   = parseFloat(noBtn.style.top)  || (vh / 2 - btnH / 2);
-      const curZX  = Math.floor(((curX - EDGE) / areaW) * 3);
-      const curZY  = Math.floor(((curY - EDGE) / areaH) * 3);
-
-      let x, y, tooClose, tries = 0;
+      let x, y, dist, tries = 0;
 
       do {
-        let zx, zy, zoneTries = 0;
-        do {
-          zx = Math.floor(Math.random() * 3);
-          zy = Math.floor(Math.random() * 3);
-          zoneTries++;
-        } while (zoneTries < 30 && zx === curZX && zy === curZY);
+        x = EDGE + Math.random() * (vw - btnW - 2 * EDGE);
+        y = EDGE + Math.random() * (vh - btnH - 2 * EDGE);
 
-        const slotW = areaW / 3;
-        const slotH = areaH / 3;
-        x = EDGE + zx * slotW + Math.random() * slotW;
-        y = EDGE + zy * slotH + Math.random() * slotH;
-
-        // Hard clamp — absolute safety net, never ever outside viewport
-        x = Math.max(EDGE, Math.min(x, vw - btnW - EDGE));
-        y = Math.max(EDGE, Math.min(y, vh - btnH - EDGE));
-
-        // Check if too close (overlap + buffer)
-        tooClose = mouseX >= (x - BUFFER) && mouseX <= (x + btnW + BUFFER) &&
-                   mouseY >= (y - BUFFER) && mouseY <= (y + btnH + BUFFER);
-
+        dist = Math.sqrt((x + btnW / 2 - currentX) ** 2 + (y + btnH / 2 - currentY) ** 2);
         tries++;
-      } while (tooClose && tries < 50);
+      } while (dist < BUFFER + btnW / 2 && tries < 50);
 
-      // Fallback if no position found (e.g., small screen): bottom-right corner
-      if (tooClose) {
+      if (tries >= 50) {
         x = vw - btnW - EDGE;
         y = vh - btnH - EDGE;
       }
@@ -412,19 +384,10 @@
     }
 
     /* ── No button handler ──────────────────── */
-    function handleNo(e) {
+    function handleNo(mouseX, mouseY) {
       if (onCooldown) return;
       onCooldown = true;
-      setTimeout(() => { onCooldown = false; }, 600);
-
-      let mouseX, mouseY;
-      if (e.type === 'mouseenter') {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      } else if (e.type === 'touchstart') {
-        mouseX = e.touches[0].clientX;
-        mouseY = e.touches[0].clientY;
-      }
+      setTimeout(() => { onCooldown = false; }, 300);  // Shorter cooldown for smoother feel
 
       noCount++;
 
@@ -447,24 +410,18 @@
         noBtn.style.top  = r.top  + "px";
         noBtn.classList.add("floating");
         hint.style.opacity = "0";
+        // Switch to proximity mode after first dodge
+        proximityMode = true;
+        noBtn.removeEventListener("mouseenter", initialHandleNo);
+        noBtn.removeEventListener("touchstart", initialTouchHandler);
       }
-
-      // Remove listeners to prevent any possible event during move
-      noBtn.removeEventListener("mouseenter", handleNo);
-      noBtn.removeEventListener("touchstart", touchHandler);
 
       const { x, y } = safePos(mouseX, mouseY);
       noBtn.style.left = x + "px";
       noBtn.style.top  = y + "px";
 
-      // Temporarily disable pointer events for extra safety
       noBtn.style.pointerEvents = 'none';
-      setTimeout(() => {
-        noBtn.style.pointerEvents = 'auto';
-        // Re-add listeners after short delay
-        noBtn.addEventListener("mouseenter", handleNo);
-        noBtn.addEventListener("touchstart", touchHandler, { passive: false });
-      }, 100);
+      setTimeout(() => { noBtn.style.pointerEvents = 'auto'; }, 100);
 
       noBtn.classList.remove("popped");
       void noBtn.offsetWidth;
@@ -475,6 +432,38 @@
       subtext.innerHTML  = subtexts[Math.min(noCount, subtexts.length - 1)];
     }
 
+    /* ── Proximity check ────────────────────── */
+    function checkProximity(e) {
+      if (!proximityMode || onCooldown) return;
+
+      let mouseX, mouseY;
+      if (e.type === 'mousemove') {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      } else if (e.type === 'touchmove') {
+        mouseX = e.touches[0].clientX;
+        mouseY = e.touches[0].clientY;
+      }
+
+      const rect = noBtn.getBoundingClientRect();
+      const centerX = rect.left + btnW / 2;
+      const centerY = rect.top + btnH / 2;
+      const dist = Math.sqrt((mouseX - centerX) ** 2 + (mouseY - centerY) ** 2);
+
+      if (dist < btnW / 2 + 30) {  // Threshold: half button width + buffer
+        handleNo(mouseX, mouseY);
+      }
+    }
+
+    /* ── Throttled proximity ────────────────── */
+    let rafId;
+    function throttledCheck(e) {
+      lastMouseX = e.type === 'mousemove' ? e.clientX : e.touches ? e.touches[0].clientX : lastMouseX;
+      lastMouseY = e.type === 'mousemove' ? e.clientY : e.touches ? e.touches[0].clientY : lastMouseY;
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => checkProximity(e));
+    }
+
     /* ── Success ────────────────────────────── */
     function showSuccess() {
       videoOverlay.classList.remove("active");
@@ -482,14 +471,25 @@
       confetti();
     }
 
-    /* ── Listeners ──────────────────────────── */
+    /* ── Initial listeners (for first interaction) ── */
+    function initialHandleNo(e) {
+      handleNo(e.clientX, e.clientY);
+    }
+
+    const initialTouchHandler = e => {
+      e.preventDefault();
+      handleNo(e.touches[0].clientX, e.touches[0].clientY);
+    };
+
+    noBtn.addEventListener("mouseenter", initialHandleNo);
+    noBtn.addEventListener("touchstart", initialTouchHandler, { passive: false });
+
+    /* ── Global listeners for proximity ─────── */
+    document.addEventListener("mousemove", throttledCheck);
+    document.addEventListener("touchmove", throttledCheck, { passive: false });
+
     yesBtn.addEventListener("click", showSuccess);
     finalYes.addEventListener("click", showSuccess);
-
-    // Wrap touchstart in a function for easy remove/add
-    const touchHandler = e => { e.preventDefault(); handleNo(e); };
-    noBtn.addEventListener("mouseenter", handleNo);
-    noBtn.addEventListener("touchstart", touchHandler, { passive: false });
 
     videoOverlay.addEventListener("click", e => {
       if (e.target === videoOverlay) videoOverlay.classList.remove("active");
